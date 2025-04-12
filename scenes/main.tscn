@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=4 uid="uid://dcy753c2sg5po"]
+
+[ext_resource type="Texture2D" uid="uid://d386pmt6gtvx5" path="res://assets/pixel chess_v1.2/boards/board_plain_02.png" id="1_sugp2"]
+[ext_resource type="TileSet" uid="uid://dy2427da715b2" path="res://scenes/main.tres" id="2_0wfyh"]
+
+[node name="Node2D" type="Node2D"]
+texture_filter = 1
+
+[node name="Board sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_sugp2")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+y_sort_enabled = true
+tile_map_data = PackedByteArray("AAD9/wIAAwAAAAEAAAD//wIAAwAAAAEAAAABAAIAAwAAAAEAAAACAAIAAwAAAAEAAAD//wMAAwAEAAAAAAD+/wMAAwADAAAAAAD8//3/AQAAAAEAAAD9//3/AQAAAAEAAAD+//3/AQAAAAEAAAD///3/AQAAAAEAAAAAAP3/AQAAAAEAAAABAP3/AQAAAAEAAAACAP3/AQAAAAEAAAADAP3/AQAAAAEAAAD9//z/AQABAAAAAAACAPz/AQABAAAAAAD8//z/AQACAAAAAAADAPz/AQACAAAAAAD+//z/AQADAAAAAAABAPz/AQADAAAAAAD///z/AQAEAAAAAAAAAPz/AQAFAAAAAAADAAIAAwAAAAEAAAADAAMAAwACAAAAAAD9/wMAAwABAAAAAAD+/wIAAwAAAAEAAAABAAMAAwADAAAAAAACAAMAAwABAAAAAAD8/wIAAwAAAAEAAAAAAAMAAwAFAAAAAAD8/wMAAwACAAAAAAAAAAIAAwAAAAEAAAA=")
+tile_set = ExtResource("2_0wfyh")

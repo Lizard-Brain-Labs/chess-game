@@ -1,0 +1,48 @@
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://dy2427da715b2"]
+
+[ext_resource type="Texture2D" uid="uid://cbp67yqoq6uw3" path="res://assets/pixel chess_v1.2/16x32 pieces/BlackPieces-Sheet.png" id="1_ml2w2"]
+[ext_resource type="Texture2D" uid="uid://0hkkrgiwjnoi" path="res://assets/pixel chess_v1.2/16x32 pieces/WhitePieces-Sheet.png" id="2_jwjum"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tefeu"]
+resource_name = "black_sheet"
+texture = ExtResource("1_ml2w2")
+0:1/0 = 0
+1:0/size_in_atlas = Vector2i(1, 2)
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, 8)
+2:0/size_in_atlas = Vector2i(1, 2)
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(0, 8)
+3:0/size_in_atlas = Vector2i(1, 2)
+3:0/0 = 0
+3:0/0/texture_origin = Vector2i(0, 8)
+4:0/size_in_atlas = Vector2i(1, 2)
+4:0/0 = 0
+4:0/0/texture_origin = Vector2i(0, 8)
+5:0/size_in_atlas = Vector2i(1, 2)
+5:0/0 = 0
+5:0/0/texture_origin = Vector2i(0, 8)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o6xl0"]
+resource_name = "white_sheet"
+texture = ExtResource("2_jwjum")
+0:1/0 = 0
+1:0/size_in_atlas = Vector2i(1, 2)
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, 8)
+2:0/size_in_atlas = Vector2i(1, 2)
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(0, 8)
+3:0/size_in_atlas = Vector2i(1, 2)
+3:0/0 = 0
+3:0/0/texture_origin = Vector2i(0, 8)
+4:0/size_in_atlas = Vector2i(1, 2)
+4:0/0 = 0
+4:0/0/texture_origin = Vector2i(0, 8)
+5:0/size_in_atlas = Vector2i(1, 2)
+5:0/0 = 0
+5:0/0/texture_origin = Vector2i(0, 8)
+
+[resource]
+sources/1 = SubResource("TileSetAtlasSource_tefeu")
+sources/3 = SubResource("TileSetAtlasSource_o6xl0")
