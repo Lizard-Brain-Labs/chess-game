@@ -1,15 +1,24 @@
-[gd_scene load_steps=3 format=4 uid="uid://dcy753c2sg5po"]
+[gd_scene load_steps=4 format=4 uid="uid://dcy753c2sg5po"]
 
+[ext_resource type="Script" uid="uid://bomjay32hk2dv" path="res://scenes/main.gd" id="1_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://d386pmt6gtvx5" path="res://assets/pixel chess_v1.2/boards/board_plain_02.png" id="1_sugp2"]
 [ext_resource type="TileSet" uid="uid://dy2427da715b2" path="res://scenes/main.tres" id="2_0wfyh"]
 
 [node name="Node2D" type="Node2D"]
 texture_filter = 1
+script = ExtResource("1_jyhfs")
 
-[node name="Board sprite" type="Sprite2D" parent="."]
+[node name="board anchor" type="Node2D" parent="."]
+position = Vector2(400, 400)
+scale = Vector2(0.4, 0.4)
+
+[node name="Board sprite" type="Sprite2D" parent="board anchor"]
+position = Vector2(-2.50002, -1.5378e-05)
+scale = Vector2(12.5, 12.5)
 texture = ExtResource("1_sugp2")
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
+[node name="Pieces TileMap" type="TileMapLayer" parent="board anchor"]
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAD9/wIAAwAAAAEAAAD//wIAAwAAAAEAAAABAAIAAwAAAAEAAAACAAIAAwAAAAEAAAD//wMAAwAEAAAAAAD+/wMAAwADAAAAAAD8//3/AQAAAAEAAAD9//3/AQAAAAEAAAD+//3/AQAAAAEAAAD///3/AQAAAAEAAAAAAP3/AQAAAAEAAAABAP3/AQAAAAEAAAACAP3/AQAAAAEAAAADAP3/AQAAAAEAAAD9//z/AQABAAAAAAACAPz/AQABAAAAAAD8//z/AQACAAAAAAADAPz/AQACAAAAAAD+//z/AQADAAAAAAABAPz/AQADAAAAAAD///z/AQAEAAAAAAAAAPz/AQAFAAAAAAADAAIAAwAAAAEAAAADAAMAAwACAAAAAAD9/wMAAwABAAAAAAD+/wIAAwAAAAEAAAABAAMAAwADAAAAAAACAAMAAwABAAAAAAD8/wIAAwAAAAEAAAAAAAMAAwAFAAAAAAD8/wMAAwACAAAAAAAAAAIAAwAAAAEAAAA=")
+position = Vector2(-802.5, -802.5)
+tile_map_data = PackedByteArray("AAAAAAAAAgAEAAEAAAABAAAAAgADAAEAAAACAAAAAgACAAEAAAADAAAAAgABAAEAAAAEAAAAAgAAAAEAAAAFAAAAAgACAAEAAAAGAAAAAgADAAEAAAAHAAAAAgAEAAEAAAAAAAEAAgAFAAEAAAAAAAYAAgAFAAAAAAAAAAcAAgAEAAAAAAABAAEAAgAFAAEAAAABAAYAAgAFAAAAAAABAAcAAgADAAAAAAACAAEAAgAFAAEAAAACAAYAAgAFAAAAAAACAAcAAgACAAAAAAADAAEAAgAFAAEAAAADAAYAAgAFAAAAAAADAAcAAgABAAAAAAAEAAEAAgAFAAEAAAAEAAYAAgAFAAAAAAAEAAcAAgAAAAAAAAAFAAEAAgAFAAEAAAAFAAYAAgAFAAAAAAAFAAcAAgACAAAAAAAGAAEAAgAFAAEAAAAGAAYAAgAFAAAAAAAGAAcAAgADAAAAAAAHAAEAAgAFAAEAAAAHAAYAAgAFAAAAAAAHAAcAAgAEAAAAAAA=")
 tile_set = ExtResource("2_0wfyh")

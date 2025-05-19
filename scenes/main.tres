@@ -1,15 +1,13 @@
-[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://dy2427da715b2"]
+[gd_resource type="TileSet" load_steps=7 format=3 uid="uid://dy2427da715b2"]
 
 [ext_resource type="Texture2D" uid="uid://cbp67yqoq6uw3" path="res://assets/pixel chess_v1.2/16x32 pieces/BlackPieces-Sheet.png" id="1_ml2w2"]
 [ext_resource type="Texture2D" uid="uid://0hkkrgiwjnoi" path="res://assets/pixel chess_v1.2/16x32 pieces/WhitePieces-Sheet.png" id="2_jwjum"]
+[ext_resource type="Texture2D" uid="uid://hcra5i5e3ln0" path="res://resources/Chess_Pieces_Sprite.svg.png" id="2_vyny3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tefeu"]
 resource_name = "black_sheet"
 texture = ExtResource("1_ml2w2")
 0:1/0 = 0
-1:0/size_in_atlas = Vector2i(1, 2)
-1:0/0 = 0
-1:0/0/texture_origin = Vector2i(0, 8)
 2:0/size_in_atlas = Vector2i(1, 2)
 2:0/0 = 0
 2:0/0/texture_origin = Vector2i(0, 8)
@@ -22,6 +20,52 @@ texture = ExtResource("1_ml2w2")
 5:0/size_in_atlas = Vector2i(1, 2)
 5:0/0 = 0
 5:0/0/texture_origin = Vector2i(0, 8)
+1:0/size_in_atlas = Vector2i(1, 2)
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, 8)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_smsmi"]
+resource_name = "chess_pieces"
+texture = ExtResource("2_vyny3")
+margins = Vector2i(10, 10)
+separation = Vector2i(21, 21)
+texture_region_size = Vector2i(192, 192)
+0:0/0 = 0
+0:0/0/custom_data_0 = "King"
+0:0/0/custom_data_1 = "white"
+0:1/0 = 0
+0:1/0/custom_data_0 = "King"
+0:1/0/custom_data_1 = "black"
+1:1/0 = 0
+1:1/0/custom_data_0 = "Queen"
+1:1/0/custom_data_1 = "black"
+2:1/0 = 0
+2:1/0/custom_data_0 = "Bishop"
+2:1/0/custom_data_1 = "black"
+3:1/0 = 0
+3:1/0/custom_data_0 = "Knight"
+3:1/0/custom_data_1 = "black"
+4:1/0 = 0
+4:1/0/custom_data_0 = "Rook"
+4:1/0/custom_data_1 = "black"
+5:1/0 = 0
+5:1/0/custom_data_0 = "Pawn"
+5:1/0/custom_data_1 = "black"
+5:0/0 = 0
+5:0/0/custom_data_0 = "Pawn"
+5:0/0/custom_data_1 = "white"
+4:0/0 = 0
+4:0/0/custom_data_0 = "Rook"
+4:0/0/custom_data_1 = "white"
+3:0/0 = 0
+3:0/0/custom_data_0 = "Knight"
+3:0/0/custom_data_1 = "white"
+2:0/0 = 0
+2:0/0/custom_data_0 = "Bishop"
+2:0/0/custom_data_1 = "white"
+1:0/0 = 0
+1:0/0/custom_data_0 = "Queen"
+1:0/0/custom_data_1 = "white"
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o6xl0"]
 resource_name = "white_sheet"
@@ -44,5 +88,11 @@ texture = ExtResource("2_jwjum")
 5:0/0/texture_origin = Vector2i(0, 8)
 
 [resource]
+tile_size = Vector2i(200, 200)
+custom_data_layer_0/name = "piece"
+custom_data_layer_0/type = 4
+custom_data_layer_1/name = "color"
+custom_data_layer_1/type = 4
 sources/1 = SubResource("TileSetAtlasSource_tefeu")
 sources/3 = SubResource("TileSetAtlasSource_o6xl0")
+sources/2 = SubResource("TileSetAtlasSource_smsmi")

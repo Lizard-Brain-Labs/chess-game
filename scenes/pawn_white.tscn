@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dge0b05kd68cx"]
+
+[ext_resource type="Texture2D" uid="uid://biyb4jfwhwo62" path="res://resources/pawn_white.png" id="1_m0rj4"]
+
+[node name="PawnWhite" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_m0rj4")
