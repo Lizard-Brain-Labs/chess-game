@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://ogerbx64p5yp"]
+
+[ext_resource type="Texture2D" uid="uid://djv1klxfaq4lq" path="res://resources/Chess_bdt45.svg" id="1_axanw"]
+
+[node name="BishopBlack" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_axanw")

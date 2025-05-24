@@ -18,9 +18,9 @@ func _create_board():
 		for file in range(0,8):
 			var square = ColorRect.new()
 			if (rank + file) % 2 == 0:
-				square.color = board_color_dark
-			else:
 				square.color = board_color_light
+			else:
+				square.color = board_color_dark
 			square.size = Vector2(square_size, square_size)
 			square.position = Vector2(file * square_size, rank * square_size)
 			square.name = "%s%d" % [char(file + 97), 8 - rank]
@@ -31,3 +31,10 @@ func _create_board():
 func get_square_pos(rank:int, file:int) -> Vector2:
 	var square_pos = Vector2(file * square_size, rank * square_size)
 	return square_pos
+	
+func get_square(pos:Vector2) -> ColorRect:
+	var rank = int(pos.y / 64)
+	var file = int(pos.x / 64)
+	var square_name = "%s%d" % [char(file + 97), 8 - rank]
+	return squares[square_name]
+	

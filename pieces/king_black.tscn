@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5e3msofqelex"]
+
+[ext_resource type="Texture2D" uid="uid://bjdtmxhoyyl8e" path="res://resources/king_black.png" id="1_wjufy"]
+
+[node name="KingBlack" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_wjufy")
