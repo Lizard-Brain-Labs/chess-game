@@ -1,8 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://da41tfirvbps7"]
 
-[ext_resource type="Texture2D" uid="uid://denlevxou7ggk" path="res://resources/knight_black.png" id="1_4tpnu"]
+[ext_resource type="Texture2D" uid="uid://c3vieb8x61iad" path="res://resources/Chess_ndt45.svg" id="1_4tpnu"]
 
 [node name="KnightBlack" type="Node2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.178, 0.178)
 texture = ExtResource("1_4tpnu")

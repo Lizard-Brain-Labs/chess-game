@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://vxj8c4rl771d"]
 
-[ext_resource type="Script" uid="uid://20f5evbc42ou" path="res://chessboard.gd" id="1_ll7nw"]
+[ext_resource type="Script" uid="uid://20f5evbc42ou" path="res://scenes/chessboard.gd" id="1_ll7nw"]
 
 [node name="chessboard" type="Node2D"]
 script = ExtResource("1_ll7nw")

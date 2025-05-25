@@ -1,8 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://qeftsmt2y5lx"]
 
-[ext_resource type="Texture2D" uid="uid://t8ox6n2cmru5" path="res://resources/rook_white.png" id="1_5h2io"]
+[ext_resource type="Texture2D" uid="uid://dic1ose7qes04" path="res://resources/Chess_rlt45.svg" id="1_5h2io"]
 
 [node name="RookWhite" type="Node2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.178, 0.178)
 texture = ExtResource("1_5h2io")

@@ -5,4 +5,5 @@
 [node name="BishopBlack" type="Node2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.178, 0.178)
 texture = ExtResource("1_axanw")

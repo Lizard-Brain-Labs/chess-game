@@ -25,16 +25,18 @@ func _create_board():
 			square.position = Vector2(file * square_size, rank * square_size)
 			square.name = "%s%d" % [char(file + 97), 8 - rank]
 			squares[square.name] = square
-			
 			add_child(square)
-			
-func get_square_pos(rank:int, file:int) -> Vector2:
-	var square_pos = Vector2(file * square_size, rank * square_size)
-	return square_pos
 	
-func get_square(pos:Vector2) -> ColorRect:
+func square_from_pos(pos:Vector2) -> ColorRect:
 	var rank = int(pos.y / 64)
 	var file = int(pos.x / 64)
 	var square_name = "%s%d" % [char(file + 97), 8 - rank]
 	return squares[square_name]
+	
+func piece_on_square(square):
+	var pos = square.position
+	for child in self.get_children():
+		print(child.name + str(child.position))
+		if child is not ColorRect and child.position == pos:
+			print(child.name)
 	
