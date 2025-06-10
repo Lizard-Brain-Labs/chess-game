@@ -1,9 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://d1652qfks4m4n"]
+[gd_scene load_steps=3 format=3 uid="uid://d1652qfks4m4n"]
 
+[ext_resource type="Script" uid="uid://b7pl2wao320wx" path="res://scripts/piece.gd" id="1_44ksp"]
 [ext_resource type="Texture2D" uid="uid://0y4xt7rninkt" path="res://resources/Chess_qdt45.svg" id="1_j234a"]
 
-[node name="QueenBlack" type="Node2D"]
+[node name="QueenBlack" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 64.0
+offset_bottom = 64.0
+script = ExtResource("1_44ksp")
+type = "queen"
+color = "black"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(32, 32)
 scale = Vector2(0.178, 0.178)
 texture = ExtResource("1_j234a")

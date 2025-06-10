@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://vxj8c4rl771d" path="res://scenes/chessboard.tscn" id="2_0wfyh"]
 
 [node name="Root" type="Node2D"]
+texture_filter = 6
 script = ExtResource("1_jyhfs")
 
 [node name="chessboard" parent="." instance=ExtResource("2_0wfyh")]

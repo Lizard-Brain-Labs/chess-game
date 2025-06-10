@@ -1,9 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://beofx00i06a74"]
+[gd_scene load_steps=3 format=3 uid="uid://beofx00i06a74"]
 
+[ext_resource type="Script" uid="uid://b7pl2wao320wx" path="res://scripts/piece.gd" id="1_iepny"]
 [ext_resource type="Texture2D" uid="uid://do4lhl0k1th2w" path="res://resources/Chess_nlt45.svg" id="1_sysm8"]
 
-[node name="KnightWhite" type="Node2D"]
+[node name="KnightWhite" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 64.0
+offset_bottom = 64.0
+script = ExtResource("1_iepny")
+type = "knight"
+color = "white"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(32, 32)
 scale = Vector2(0.178, 0.178)
 texture = ExtResource("1_sysm8")
