@@ -1,10 +1,5 @@
 extends Node2D
 
-@onready var board = $chessboard
-var selected_piece : Piece = null
-var selected_square : ColorRect
-var end_square: ColorRect
-
 const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 const piece_order = ["rook", "knight", "bishop", "queen", "king", "bishop", "knight", "rook"]
 const piece_scenes = {
@@ -21,6 +16,15 @@ const piece_scenes = {
 	"king_white": preload("res://pieces/king_white.tscn"),
 	"king_black": preload("res://pieces/king_black.tscn")
 } 
+const move_marker = preload("res://scenes/move_marker.tscn")
+
+@onready var board = $chessboard
+var selected_piece : Piece = null
+var selected_square : ColorRect
+var end_square: ColorRect
+var markers = []
+
+
 func _on_piece_clicked(piece: Piece) -> void:
 	selected_piece = piece
 	print(piece.type, " ", piece.color)
@@ -37,6 +41,7 @@ func _ready():
 		add_piece(file + '8', piece_order[i], "black")
 		
 func _physics_process(_delta):
+	# TODO when more polished, this should be simplified to UI clicks and function calls. Too much logic here.
 	# select square on every click
 	if Input.is_action_just_pressed("left_click"):
 		if selected_square:
@@ -52,8 +57,7 @@ func _physics_process(_delta):
 			selected_piece.position = centered_mouse_pos
 			var moves = selected_piece.possible_moves(selected_square)
 			for move in moves:
-				var square = board.square_from_cell(move)
-				square.self_modulate = Color.LIGHT_SALMON
+				add_marker(board.square_from_cell(move))
 		
 	# let go of piece and snap to square
 	if Input.is_action_just_released("left_click"):
@@ -64,7 +68,9 @@ func _physics_process(_delta):
 			end_square = board.square_from_pos(mouse_pos)
 			end_square.self_modulate = Color.CORNFLOWER_BLUE
 			selected_piece.position = end_square.position
+			selected_piece.square_name = end_square.name
 			selected_piece = null
+			_remove_markers()
 
 func add_piece(square_name, piece, color):
 	var piece_name = piece + "_" + color
@@ -77,8 +83,9 @@ func add_piece(square_name, piece, color):
 		n += 1
 		
 	new_piece.name = piece_name
-	var square = board.squares[square_name]	
+	var square = board.squares[square_name]
 	new_piece.position = square.position
+	new_piece.square_name = square_name
 	board.add_child(new_piece)
 	new_piece.piece_clicked.connect(_on_piece_clicked)
 	
@@ -88,4 +95,15 @@ func name_exists(name):
 		if name == child.name:
 			name_exists = true
 	return name_exists
+	
+func add_marker(square:Square):
+	var marker = move_marker.instantiate()
+	marker.position = square.position
+	board.add_child(marker)
+	markers.append(marker)
+	
+func _remove_markers() -> void:
+	for marker in markers:
+		marker.queue_free()
+	markers = []
 	
