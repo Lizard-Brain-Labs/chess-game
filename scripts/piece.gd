@@ -14,7 +14,6 @@ func _gui_input(event):
 func possible_moves(square) -> Array:
 	var moves = []
 	var loc = Vector2i(square.rank, square.file)
-	print(square.rank)
 	
 	if self.type == "pawn":
 		if self.color == "white":

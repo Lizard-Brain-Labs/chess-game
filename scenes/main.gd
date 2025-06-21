@@ -27,7 +27,13 @@ var markers = []
 
 func _on_piece_clicked(piece: Piece) -> void:
 	selected_piece = piece
-	print(piece.type, " ", piece.color)
+	if selected_square:
+		selected_square.self_modulate = Color.WHITE
+	selected_square = board.squares[piece.square_name]
+	print("Selected: %s on %s" % [piece.name, selected_square.name])
+	var moves = selected_piece.possible_moves(selected_square)
+	for move in moves:
+		add_marker(board.square_from_cell(move))
 
 func _ready():
 	# load default position
@@ -47,17 +53,13 @@ func _physics_process(_delta):
 		if selected_square:
 			selected_square.self_modulate = Color.WHITE
 		selected_square = board.square_from_pos(board.get_local_mouse_position())
-		selected_square.self_modulate = Color.CORNFLOWER_BLUE
-		print(selected_square.name, Vector2i(selected_square.rank, selected_square.file))
+		selected_square.self_modulate = Color.SLATE_GRAY
 	
 	# move piece to mouse position if held
 	if Input.is_action_pressed("left_click"):
 		var centered_mouse_pos = board.get_local_mouse_position() - Vector2(32,32)
 		if selected_piece:
 			selected_piece.position = centered_mouse_pos
-			var moves = selected_piece.possible_moves(selected_square)
-			for move in moves:
-				add_marker(board.square_from_cell(move))
 		
 	# let go of piece and snap to square
 	if Input.is_action_just_released("left_click"):
@@ -66,9 +68,14 @@ func _physics_process(_delta):
 			if end_square:
 				end_square.self_modulate = Color.WHITE
 			end_square = board.square_from_pos(mouse_pos)
-			end_square.self_modulate = Color.CORNFLOWER_BLUE
-			selected_piece.position = end_square.position
-			selected_piece.square_name = end_square.name
+			for mark in markers:
+				if mark.square_name == end_square.name:
+					end_square.self_modulate = Color.SLATE_GRAY
+					selected_piece.position = end_square.position
+					selected_piece.square_name = end_square.name
+					break
+				else:
+					selected_piece.position = selected_square.position
 			selected_piece = null
 			_remove_markers()
 
@@ -99,6 +106,7 @@ func name_exists(name):
 func add_marker(square:Square):
 	var marker = move_marker.instantiate()
 	marker.position = square.position
+	marker.square_name = square.name
 	board.add_child(marker)
 	markers.append(marker)
 	
