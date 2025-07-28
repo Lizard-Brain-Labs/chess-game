@@ -23,15 +23,16 @@ var selected_piece : Piece = null
 var selected_square : ColorRect
 var end_square: ColorRect
 var markers = []
+var board_state : BoardState
 
 
 func _on_piece_clicked(piece: Piece) -> void:
 	selected_piece = piece
-	if selected_square:
+	if selected_square: # clear previously selected square
 		selected_square.self_modulate = Color.WHITE
 	selected_square = board.squares[piece.square_name]
 	print("Selected: %s on %s" % [piece.name, selected_square.name])
-	var moves = selected_piece.possible_moves(selected_square)
+	var moves = Logic.get_moves(selected_piece, board_state)
 	for move in moves:
 		add_marker(board.square_from_cell(move))
 
@@ -45,6 +46,7 @@ func _ready():
 		# add back rank pieces
 		add_piece(file + '1', piece_order[i], "white")
 		add_piece(file + '8', piece_order[i], "black")
+	board_state = BoardState.from_board_scene(board)
 		
 func _physics_process(_delta):
 	# TODO when more polished, this should be simplified to UI clicks and function calls. Too much logic here.
@@ -73,18 +75,21 @@ func _physics_process(_delta):
 					end_square.self_modulate = Color.SLATE_GRAY
 					selected_piece.position = end_square.position
 					selected_piece.square_name = end_square.name
+					selected_piece.square_grid = Vector2i(end_square.rank, end_square.file)
 					break
 				else:
 					selected_piece.position = selected_square.position
 			selected_piece = null
 			_remove_markers()
+			board_state = BoardState.from_board_scene(board)
 
 func add_piece(square_name, piece, color):
 	var piece_name = piece + "_" + color
-	var new_piece = piece_scenes[piece_name].instantiate()
+	var new_piece: Piece = piece_scenes[piece_name].instantiate()
+	piece_name = piece_name + str(0)
 	var n = 1
 	while name_exists(piece_name):
-		if n > 1:
+		if n > 0:
 			piece_name = piece_name.left(len(piece_name) -1)
 		piece_name = piece_name + str(n)
 		n += 1
@@ -93,15 +98,16 @@ func add_piece(square_name, piece, color):
 	var square = board.squares[square_name]
 	new_piece.position = square.position
 	new_piece.square_name = square_name
+	new_piece.square_grid = Vector2i(square.rank, square.file)
 	board.add_child(new_piece)
 	new_piece.piece_clicked.connect(_on_piece_clicked)
 	
-func name_exists(name):
-	var name_exists = false
+func name_exists(piece_name):
+	var piece_name_exists = false
 	for child in board.get_children():
-		if name == child.name:
-			name_exists = true
-	return name_exists
+		if piece_name == child.name:
+			piece_name_exists = true
+	return piece_name_exists
 	
 func add_marker(square:Square):
 	var marker = move_marker.instantiate()

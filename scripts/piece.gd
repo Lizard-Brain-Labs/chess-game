@@ -4,7 +4,14 @@ signal piece_clicked(piece: Piece)
 
 @export var type: String
 @export var color: String
-@export var square_name: String
+var square_name: String
+var square_grid: Vector2i
+
+# Convenience constants oriented the correct direction for Y up
+const UP = Vector2i.LEFT
+const DOWN = Vector2i.RIGHT
+const LEFT = Vector2i.DOWN
+const RIGHT = Vector2i.UP
 
 func _gui_input(event):
 	if event is InputEventMouseButton:
@@ -13,16 +20,16 @@ func _gui_input(event):
 
 func possible_moves(square) -> Array:
 	var moves = []
-	var loc = Vector2i(square.rank, square.file)
+	var piece_square = Vector2i(square.rank, square.file)
 	
 	if self.type == "pawn":
 		if self.color == "white":
-			moves.append(loc + Vector2i.LEFT)
+			moves.append(piece_square + UP)
 			if square.rank == 6:
-				moves.append(loc + Vector2i.LEFT * 2)
+				moves.append(piece_square + UP * 2)
 		if self.color == "black":
-			moves.append(loc + Vector2i.RIGHT)
+			moves.append(piece_square + DOWN)
 			if square.rank == 1:
-				moves.append(loc + Vector2i.RIGHT * 2)
+				moves.append(piece_square + DOWN * 2)
 	
 	return moves
