@@ -17,24 +17,14 @@ const piece_scenes = {
 	"king_black": preload("res://pieces/king_black.tscn")
 } 
 const move_marker = preload("res://scenes/move_marker.tscn")
-
 @onready var board = $chessboard
+@onready var debug_label: Label = %"debug label"
 var selected_piece : Piece = null
 var selected_square : ColorRect
 var end_square: ColorRect
 var markers = []
 var board_state : BoardState
-
-
-func _on_piece_clicked(piece: Piece) -> void:
-	selected_piece = piece
-	if selected_square: # clear previously selected square
-		selected_square.self_modulate = Color.WHITE
-	selected_square = board.squares[piece.square_name]
-	print("Selected: %s on %s" % [piece.name, selected_square.name])
-	var moves = Logic.get_moves(selected_piece, board_state)
-	for move in moves:
-		add_marker(board.square_from_cell(move))
+var white_turn = true
 
 func _ready():
 	# load default position
@@ -49,39 +39,74 @@ func _ready():
 	board_state = BoardState.from_board_scene(board)
 		
 func _physics_process(_delta):
-	# TODO when more polished, this should be simplified to UI clicks and function calls. Too much logic here.
-	# select square on every click
 	if Input.is_action_just_pressed("left_click"):
-		if selected_square:
-			selected_square.self_modulate = Color.WHITE
-		selected_square = board.square_from_pos(board.get_local_mouse_position())
-		selected_square.self_modulate = Color.SLATE_GRAY
-	
-	# move piece to mouse position if held
+		_handle_mouse_click()
 	if Input.is_action_pressed("left_click"):
-		var centered_mouse_pos = board.get_local_mouse_position() - Vector2(32,32)
-		if selected_piece:
-			selected_piece.position = centered_mouse_pos
+		_drag_selected_piece()
+	elif Input.is_action_just_released("left_click"):
+		_release_piece()
+	
+func _on_piece_clicked(piece: Piece) -> void:
+	selected_piece = piece
+
+func _handle_mouse_click():
+	_clear_selected_square_highlight()
+	if selected_piece:
+		selected_square = board.squares[selected_piece.square_name]
+		selected_square.self_modulate = Color.SLATE_GRAY
+		print("Selected: %s on %s" % [selected_piece.name, selected_square.name])
+		var moves = Logic.get_moves(selected_piece, board_state)
+		for move in moves:
+			add_marker(board.square_from_cell(move))
+
+func _drag_selected_piece():
+	if selected_piece:
+		selected_piece.position = board.get_local_mouse_position() - Vector2(32,32)
 		
-	# let go of piece and snap to square
-	if Input.is_action_just_released("left_click"):
-		var mouse_pos = board.get_local_mouse_position()
-		if selected_piece:
-			if end_square:
-				end_square.self_modulate = Color.WHITE
-			end_square = board.square_from_pos(mouse_pos)
-			for mark in markers:
-				if mark.square_name == end_square.name:
-					end_square.self_modulate = Color.SLATE_GRAY
-					selected_piece.position = end_square.position
-					selected_piece.square_name = end_square.name
-					selected_piece.square_grid = Vector2i(end_square.rank, end_square.file)
-					break
-				else:
-					selected_piece.position = selected_square.position
-			selected_piece = null
-			_remove_markers()
-			board_state = BoardState.from_board_scene(board)
+func _release_piece():
+	if not selected_piece:
+		return
+	
+	var target_square = board.square_from_pos(board.get_local_mouse_position())
+	_clear_end_square_highlight()
+	end_square = target_square
+	
+	var valid = _is_valid_move_to(end_square.name)
+	if valid:
+		_move_selected_piece_to(end_square)
+	else:
+		_reset_piece_to_selected_square()
+		
+	_cleanup_post_move()
+	
+func _is_valid_move_to(square_name: String) -> bool:
+	for mark in markers:
+		if mark.square_name == square_name:
+			return true
+	return false
+
+func _move_selected_piece_to(square: Square):
+	square.self_modulate = Color.SLATE_GRAY
+	selected_piece.position = square.position
+	selected_piece.square_name = square.name
+	selected_piece.square_grid = Vector2i(square.rank, square.file)
+	_next_turn()
+	
+func _reset_piece_to_selected_square():
+	selected_piece.position = selected_square.position
+
+func _cleanup_post_move():
+	selected_piece = null
+	_remove_markers()
+	board_state = BoardState.from_board_scene(board)
+	
+func _clear_selected_square_highlight():
+	if selected_square:
+		selected_square.self_modulate = Color.WHITE
+
+func _clear_end_square_highlight():
+	if end_square:
+		end_square.self_modulate = Color.WHITE
 
 func add_piece(square_name, piece, color):
 	var piece_name = piece + "_" + color
@@ -120,4 +145,11 @@ func _remove_markers() -> void:
 	for marker in markers:
 		marker.queue_free()
 	markers = []
+	
+func _next_turn() -> void:
+	white_turn = not white_turn
+	if white_turn:
+		debug_label.text = "White to move"
+	else:
+		debug_label.text = "Black to move"
 	

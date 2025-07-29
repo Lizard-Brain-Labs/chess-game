@@ -1,16 +1,16 @@
 class_name BoardState
 
 const BOARD_SIZE = 8
-# This should always ingest a Piece class which contains these variables
+
 class PieceData:
 	var type: String
 	var color: String
 	var square_grid: Vector2i
 
-	func _init(type: String, color: String, square_grid: Vector2i):
-		self.type = type
-		self.color = color
-		self.square_grid = square_grid
+	func _init(piece_type, piece_color, piece_square_grid):
+		self.type = piece_type
+		self.color = piece_color
+		self.square_grid = piece_square_grid
 
 var grid := []
 
@@ -45,3 +45,4 @@ static func from_board_scene(board_node: Node2D) -> BoardState:
 		var pdata = PieceData.new(type, color, square_grid)
 		state.grid[square_grid.x][square_grid.y] = pdata
 	return state
+	

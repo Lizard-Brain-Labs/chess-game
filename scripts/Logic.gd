@@ -10,15 +10,18 @@ static func get_moves(piece_data, board: BoardState) -> Array:
 	var moves := []
 	var piece_pos = piece_data.square_grid
 	if piece_data.type == "pawn":
-		print(piece_pos.x)
-		if piece_data.color == "white":
-			moves.append(piece_pos + UP)
-			if piece_pos.x == 6:
-				moves.append(piece_pos + UP * 2)
+		var dir = UP
 		if piece_data.color == "black":
-			moves.append(piece_pos + DOWN)
-			if piece_pos.x == 1:
-				moves.append(piece_pos + DOWN * 2)
+			dir = DOWN
+		var current = piece_pos + dir
+		var occupant = board.get_piece_at(current)
+		if occupant == null:
+			moves.append(current)
+			if (piece_pos.x == 6 and dir == UP) or (piece_pos.x == 1 and dir == DOWN): #starting row
+				current += dir
+				occupant = board.get_piece_at(current)
+				if occupant == null:
+					moves.append(current)
 	
 	if piece_data.type == "rook":
 		var directions = [UP,DOWN,LEFT,RIGHT]

@@ -8,3 +8,24 @@ texture_filter = 6
 script = ExtResource("1_jyhfs")
 
 [node name="chessboard" parent="." instance=ExtResource("2_0wfyh")]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 600.0
+offset_bottom = 600.0
+mouse_filter = 2
+
+[node name="debug label" type="Label" parent="Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -22.5
+offset_right = 22.5
+offset_bottom = 23.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "White to move"
