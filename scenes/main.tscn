@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dcy753c2sg5po"]
 
-[ext_resource type="Script" uid="uid://bomjay32hk2dv" path="res://scenes/main.gd" id="1_jyhfs"]
+[ext_resource type="Script" uid="uid://bomjay32hk2dv" path="res://scripts/main.gd" id="1_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://vxj8c4rl771d" path="res://scenes/chessboard.tscn" id="2_0wfyh"]
 
 [node name="Root" type="Node2D"]

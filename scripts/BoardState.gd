@@ -2,16 +2,6 @@ class_name BoardState
 
 const BOARD_SIZE = 8
 
-class PieceData:
-	var type: String
-	var color: String
-	var square_grid: Vector2i
-
-	func _init(piece_type, piece_color, piece_square_grid):
-		self.type = piece_type
-		self.color = piece_color
-		self.square_grid = piece_square_grid
-
 var grid := []
 
 func _init():
@@ -22,7 +12,7 @@ func _init():
 			grid[x].append(null)
 
 # Returns the piece data at a given position, or null
-func get_piece_at(pos: Vector2i) -> PieceData:
+func get_piece_at(pos: Vector2i) -> Piece:
 	if is_within_bounds(pos):
 		return grid[pos.x][pos.y]
 	return null
@@ -39,10 +29,7 @@ static func from_board_scene(board_node: Node2D) -> BoardState:
 		if not piece is Piece:
 			continue
 
-		var type = piece.type
-		var color = piece.color
-		var square_grid = piece.square_grid
-		var pdata = PieceData.new(type, color, square_grid)
-		state.grid[square_grid.x][square_grid.y] = pdata
+		var piece_pos = piece.square_grid
+		state.grid[piece_pos.x][piece_pos.y] = piece
 	return state
 	

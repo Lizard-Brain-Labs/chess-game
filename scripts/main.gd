@@ -55,7 +55,7 @@ func _handle_mouse_click():
 		selected_square = board.squares[selected_piece.square_name]
 		selected_square.self_modulate = Color.SLATE_GRAY
 		print("Selected: %s on %s" % [selected_piece.name, selected_square.name])
-		var moves = Logic.get_moves(selected_piece, board_state)
+		var moves = MoveGenerator.get_moves(selected_piece, board_state)
 		for move in moves:
 			add_marker(board.square_from_cell(move))
 
@@ -85,11 +85,13 @@ func _is_valid_move_to(square_name: String) -> bool:
 			return true
 	return false
 
+# TODO: Add a Move class to represent a move action: to, from, capture, castle, promotion, etc.
 func _move_selected_piece_to(square: Square):
 	square.self_modulate = Color.SLATE_GRAY
 	selected_piece.position = square.position
 	selected_piece.square_name = square.name
 	selected_piece.square_grid = Vector2i(square.rank, square.file)
+	selected_piece.has_moved = true
 	_next_turn()
 	
 func _reset_piece_to_selected_square():

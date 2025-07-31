@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://2olvo5bmf4d5"]
 
-[ext_resource type="Script" uid="uid://cc4qjyoahlnn1" path="res://scenes/move_marker.gd" id="1_htbjf"]
+[ext_resource type="Script" uid="uid://cc4qjyoahlnn1" path="res://move_marker.gd" id="1_htbjf"]
 [ext_resource type="Texture2D" uid="uid://5m5jlolhaxwj" path="res://resources/circle.png" id="1_inkqd"]
 
 [node name="moveMarker" type="Control"]

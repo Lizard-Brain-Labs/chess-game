@@ -6,6 +6,7 @@ signal piece_clicked(piece: Piece)
 @export var color: String
 var square_name: String
 var square_grid: Vector2i
+var has_moved: bool = false
 
 # Convenience constants oriented the correct direction for Y up
 const UP = Vector2i.LEFT
