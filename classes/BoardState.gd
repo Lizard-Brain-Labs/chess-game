@@ -1,4 +1,5 @@
 class_name BoardState
+# Represents the state of a chess board in data
 
 const BOARD_SIZE = 8
 
@@ -12,7 +13,7 @@ func _init():
 			grid[x].append(null)
 
 # Returns the piece data at a given position, or null
-func get_piece_at(pos: Vector2i) -> Piece:
+func get_piece_at(pos: Vector2i):
 	if is_within_bounds(pos):
 		return grid[pos.x][pos.y]
 	return null

@@ -12,7 +12,7 @@ const NW = NORTH + WEST
 const SE = SOUTH + EAST
 const SW = SOUTH + WEST
 
-static func get_moves(piece: Piece, board: BoardState) -> Array:
+static func get_moves(piece: Piece, board: BoardState) -> Array[Move]:
 	match piece.type:
 		"pawn":
 			return _get_pawn_moves(piece, board)
@@ -38,38 +38,42 @@ static func get_moves(piece: Piece, board: BoardState) -> Array:
 			return []
 
 static func _get_pawn_moves(piece: Piece, board: BoardState) -> Array:
-	var moves := []
+	var moves: Array[Move] = []
 	var dir = NORTH if piece.color == "white" else SOUTH
 	var pos = piece.square_grid
 	var next = pos + dir
 	if board.is_within_bounds(next) and board.get_piece_at(next) == null:
-		moves.append(next)
+		moves.append(Move.new(piece, next))
 		# Double move if pawn hasn't moved yet
 		var double_next = next + dir
 		if not piece.has_moved and board.get_piece_at(double_next) == null:
-			moves.append(double_next)
+			moves.append(Move.new(piece, double_next))
 	# Captures
 	for diag in [dir + EAST, dir + WEST]:
 		var target = pos + diag
 		if board.is_within_bounds(target):
 			var occupant = board.get_piece_at(target)
 			if occupant and occupant.color != piece.color:
-				moves.append(target)
+				moves.append(Move.new(piece, target, occupant))
+	# En passant ...
+
+	# Promotion ...
+	
 	return moves
 
 static func _get_moves_in_directions(
 	board: BoardState, piece: Piece, directions: Array, max_distance := 8
 ) -> Array:
-	var moves := []
+	var moves : Array[Move] = []
 	for dir in directions:
 		var current = piece.square_grid + dir
 		var steps = 1
 		while board.is_within_bounds(current) and steps <= max_distance:
 			var occupant = board.get_piece_at(current)
 			if occupant == null:
-				moves.append(current)
+				moves.append(Move.new(piece, current))
 			elif occupant.color != piece.color:
-				moves.append(current)
+				moves.append(Move.new(piece, current, occupant))
 				break
 			else:
 				break
@@ -78,7 +82,7 @@ static func _get_moves_in_directions(
 	return moves
 
 static func _get_knight_moves(piece, board: BoardState) -> Array:
-	var moves := []
+	var moves : Array[Move]= []
 	var jumps = [
 		Vector2i(-2, -1), Vector2i(-2, 1), Vector2i(-1, -2), Vector2i(-1, 2),
 		Vector2i(1, -2), Vector2i(1, 2), Vector2i(2, -1), Vector2i(2, 1)
@@ -87,8 +91,10 @@ static func _get_knight_moves(piece, board: BoardState) -> Array:
 		var target = piece.square_grid + jump
 		if board.is_within_bounds(target):
 			var occupant = board.get_piece_at(target)
-			if occupant == null or occupant.color != piece.color:
-				moves.append(target)
+			if occupant == null:
+				moves.append(Move.new(piece, target))
+			elif occupant.color != piece.color:
+				moves.append(Move.new(piece, target, occupant))
 	return moves
 
 static func _get_king_moves(piece: Piece, board: BoardState) -> Array:
@@ -99,7 +105,7 @@ static func _get_king_moves(piece: Piece, board: BoardState) -> Array:
 	return moves
 
 static func _get_castling_moves(piece, board: BoardState) -> Array:
-	var moves := []
+	var moves : Array[Move]= []
 	if piece.has_moved:
 		return moves # King has moved, can't castle
 
@@ -117,7 +123,7 @@ static func _get_castling_moves(piece, board: BoardState) -> Array:
 				clear = false
 				break
 		if clear:
-			moves.append(Vector2i(row, col + 2))
+			moves.append(Move.new(piece, Vector2i(row, col + 2), null, [kingside_rook, Vector2i(row, 5)]))
 
 	# Queenside castling
 	var queenside_rook_pos = Vector2i(row, 0)
@@ -129,6 +135,6 @@ static func _get_castling_moves(piece, board: BoardState) -> Array:
 				clear = false
 				break
 		if clear:
-			moves.append(Vector2i(row, col - 2))
+			moves.append(Move.new(piece, Vector2i(row, col - 2)))
 
 	return moves

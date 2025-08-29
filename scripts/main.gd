@@ -22,7 +22,8 @@ const move_marker = preload("res://scenes/move_marker.tscn")
 var selected_piece : Piece = null
 var selected_square : ColorRect
 var end_square: ColorRect
-var markers = []
+var move_choices = {}
+var markers:Array[Control] = []
 var board_state : BoardState
 var white_turn = true
 
@@ -54,10 +55,10 @@ func _handle_mouse_click():
 	if selected_piece:
 		selected_square = board.squares[selected_piece.square_name]
 		selected_square.self_modulate = Color.SLATE_GRAY
-		print("Selected: %s on %s" % [selected_piece.name, selected_square.name])
 		var moves = MoveGenerator.get_moves(selected_piece, board_state)
 		for move in moves:
-			add_marker(board.square_from_cell(move))
+			add_marker(board.square_from_cell(move.to))
+			move_choices[move.to] = move
 
 func _drag_selected_piece():
 	if selected_piece:
@@ -73,7 +74,8 @@ func _release_piece():
 	
 	var valid = _is_valid_move_to(end_square.name)
 	if valid:
-		_move_selected_piece_to(end_square)
+		var move = move_choices[Vector2i(end_square.rank, end_square.file)]
+		_move_selected_piece(move, end_square)
 	else:
 		_reset_piece_to_selected_square()
 		
@@ -85,13 +87,24 @@ func _is_valid_move_to(square_name: String) -> bool:
 			return true
 	return false
 
-# TODO: Add a Move class to represent a move action: to, from, capture, castle, promotion, etc.
-func _move_selected_piece_to(square: Square):
+func _move_selected_piece(move: Move, square: Square):
+	print("Moving ", selected_piece.name, " to ", square.name)
 	square.self_modulate = Color.SLATE_GRAY
 	selected_piece.position = square.position
 	selected_piece.square_name = square.name
 	selected_piece.square_grid = Vector2i(square.rank, square.file)
 	selected_piece.has_moved = true
+	if move.captured_piece:
+		print("Capturing ", move.captured_piece.name)
+		move.captured_piece.queue_free()
+	elif move.castle_rook:
+		var rook = move.castle_rook[0]
+		var new_rook_square = board.square_from_cell(move.castle_rook[1])
+		print("Castling rook ", rook.name, " to ", new_rook_square.name)
+		rook.position = new_rook_square.position
+		rook.square_name = new_rook_square.name
+		rook.square_grid = Vector2i(new_rook_square.rank, new_rook_square.file)
+		rook.has_moved = true
 	_next_turn()
 	
 func _reset_piece_to_selected_square():

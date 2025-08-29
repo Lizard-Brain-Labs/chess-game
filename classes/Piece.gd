@@ -1,4 +1,5 @@
 class_name Piece extends Control
+# Represents a chess piece on the board
 
 signal piece_clicked(piece: Piece)
 
