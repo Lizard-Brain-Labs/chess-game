@@ -20,8 +20,8 @@ const move_marker = preload("res://scenes/move_marker.tscn")
 @onready var board = $chessboard
 @onready var debug_label: Label = %"debug label"
 var selected_piece : Piece = null
-var selected_square : ColorRect
-var end_square: ColorRect
+var selected_square : Square
+var end_square: Square
 var move_choices = {}
 var markers:Array[Control] = []
 var board_state : BoardState
@@ -29,14 +29,13 @@ var white_turn = true
 
 func _ready():
 	# load default position
-	for i in files.size():
-		var file = files[i]
+	for file in range(8):
 		# add pawns
-		add_piece(file + '2', "pawn", "white")
-		add_piece(file + '7', "pawn", "black")
+		add_piece(board.squares[Vector2i(6, file)], "pawn", "white")
+		add_piece(board.squares[Vector2i(1, file)], "pawn", "black")
 		# add back rank pieces
-		add_piece(file + '1', piece_order[i], "white")
-		add_piece(file + '8', piece_order[i], "black")
+		add_piece(board.squares[Vector2i(7, file)], piece_order[file], "white")
+		add_piece(board.squares[Vector2i(0, file)], piece_order[file], "black")
 	board_state = BoardState.from_board_scene(board)
 		
 func _physics_process(_delta):
@@ -49,15 +48,16 @@ func _physics_process(_delta):
 	
 func _on_piece_clicked(piece: Piece) -> void:
 	selected_piece = piece
+	_remove_markers()
 
-func _handle_mouse_click():
+func _handle_mouse_click() -> void:
 	_clear_selected_square_highlight()
 	if selected_piece:
-		selected_square = board.squares[selected_piece.square_name]
+		selected_square = selected_piece.square
 		selected_square.self_modulate = Color.SLATE_GRAY
 		var moves = MoveGenerator.get_moves(selected_piece, board_state)
-		for move in moves:
-			add_marker(board.square_from_cell(move.to))
+		for move: Move in moves:
+			add_marker(board.squares[move.to])
 			move_choices[move.to] = move
 
 func _drag_selected_piece():
@@ -67,44 +67,38 @@ func _drag_selected_piece():
 func _release_piece():
 	if not selected_piece:
 		return
-	
-	var target_square = board.square_from_pos(board.get_local_mouse_position())
-	_clear_end_square_highlight()
-	end_square = target_square
-	
-	var valid = _is_valid_move_to(end_square.name)
+
+	end_square = board.square_from_pos(board.get_local_mouse_position())
+	var valid = _is_valid_move_to(end_square)
 	if valid:
-		var move = move_choices[Vector2i(end_square.rank, end_square.file)]
-		_move_selected_piece(move, end_square)
+		var move = move_choices[end_square.cell]
+		_move_selected_piece(move)
 	else:
 		_reset_piece_to_selected_square()
 		
-	_cleanup_post_move()
 	
-func _is_valid_move_to(square_name: String) -> bool:
-	for mark in markers:
-		if mark.square_name == square_name:
+func _is_valid_move_to(square: Square) -> bool:
+	for move_choice in move_choices.values():
+		if move_choice.to == square.cell:
 			return true
 	return false
 
-func _move_selected_piece(move: Move, square: Square):
-	print("Moving ", selected_piece.name, " to ", square.name)
-	square.self_modulate = Color.SLATE_GRAY
-	selected_piece.position = square.position
-	selected_piece.square_name = square.name
-	selected_piece.square_grid = Vector2i(square.rank, square.file)
-	selected_piece.has_moved = true
+func _move_selected_piece(move: Move) -> void:
+	var to_square = board.squares[move.to]
+	var piece = move.piece
+	print("Moving ", piece.name, " to ", to_square.name)
+	print("Debug: From ", move.from, " to ", move.to, " piece: ", move.piece.name, " captured: ", move.captured_piece, " castle: ", move.castle)
+	board.squares[move.from].self_modulate = Color.SLATE_GRAY
+	piece.position = to_square.position
+	piece.square = to_square
+	piece.has_moved = true
 	if move.captured_piece:
 		print("Capturing ", move.captured_piece.name)
 		move.captured_piece.queue_free()
-	elif move.castle_rook:
-		var rook = move.castle_rook[0]
-		var new_rook_square = board.square_from_cell(move.castle_rook[1])
-		print("Castling rook ", rook.name, " to ", new_rook_square.name)
-		rook.position = new_rook_square.position
-		rook.square_name = new_rook_square.name
-		rook.square_grid = Vector2i(new_rook_square.rank, new_rook_square.file)
-		rook.has_moved = true
+	elif move.castle:
+		print("Castling, moving rook")
+		_move_selected_piece(move.castle)
+	_cleanup_post_move()
 	_next_turn()
 	
 func _reset_piece_to_selected_square():
@@ -114,6 +108,7 @@ func _cleanup_post_move():
 	selected_piece = null
 	_remove_markers()
 	board_state = BoardState.from_board_scene(board)
+	print("Debug: Board state updated")
 	
 func _clear_selected_square_highlight():
 	if selected_square:
@@ -123,8 +118,8 @@ func _clear_end_square_highlight():
 	if end_square:
 		end_square.self_modulate = Color.WHITE
 
-func add_piece(square_name, piece, color):
-	var piece_name = piece + "_" + color
+func add_piece(square: Square, piece_type: String, color: String):
+	var piece_name = piece_type + "_" + color
 	var new_piece: Piece = piece_scenes[piece_name].instantiate()
 	piece_name = piece_name + str(0)
 	var n = 1
@@ -135,10 +130,9 @@ func add_piece(square_name, piece, color):
 		n += 1
 		
 	new_piece.name = piece_name
-	var square = board.squares[square_name]
 	new_piece.position = square.position
-	new_piece.square_name = square_name
-	new_piece.square_grid = Vector2i(square.rank, square.file)
+	new_piece.square = square
+	print("Adding piece ", new_piece.name, " at ", square.cell)
 	board.add_child(new_piece)
 	new_piece.piece_clicked.connect(_on_piece_clicked)
 	
@@ -160,6 +154,7 @@ func _remove_markers() -> void:
 	for marker in markers:
 		marker.queue_free()
 	markers = []
+	move_choices.clear()
 	
 func _next_turn() -> void:
 	white_turn = not white_turn

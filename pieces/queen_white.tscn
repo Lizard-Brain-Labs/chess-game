@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ce153lrjwjtot"]
 
-[ext_resource type="Script" uid="uid://b7pl2wao320wx" path="res://scripts/piece.gd" id="1_ko3rm"]
+[ext_resource type="Script" uid="uid://b7pl2wao320wx" path="res://classes/Piece.gd" id="1_ko3rm"]
 [ext_resource type="Texture2D" uid="uid://152x2d5m6yhb" path="res://resources/Chess_qlt45.svg" id="1_xl0sh"]
 
 [node name="QueenWhite" type="Control"]

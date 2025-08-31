@@ -30,7 +30,7 @@ static func from_board_scene(board_node: Node2D) -> BoardState:
 		if not piece is Piece:
 			continue
 
-		var piece_pos = piece.square_grid
+		var piece_pos = piece.square.cell
 		state.grid[piece_pos.x][piece_pos.y] = piece
 	return state
 	
