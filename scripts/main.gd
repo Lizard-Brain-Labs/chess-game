@@ -87,7 +87,6 @@ func _move_selected_piece(move: Move) -> void:
 	var to_square = board.squares[move.to]
 	var piece = move.piece
 	print("Moving ", piece.name, " to ", to_square.name)
-	print("Debug: From ", move.from, " to ", move.to, " piece: ", move.piece.name, " captured: ", move.captured_piece, " castle: ", move.castle)
 	board.squares[move.from].self_modulate = Color.SLATE_GRAY
 	piece.position = to_square.position
 	piece.square = to_square
@@ -96,7 +95,7 @@ func _move_selected_piece(move: Move) -> void:
 		print("Capturing ", move.captured_piece.name)
 		move.captured_piece.queue_free()
 	elif move.castle:
-		print("Castling, moving rook")
+		print("Castling, moving rook:")
 		_move_selected_piece(move.castle)
 	_cleanup_post_move()
 	_next_turn()
@@ -108,7 +107,6 @@ func _cleanup_post_move():
 	selected_piece = null
 	_remove_markers()
 	board_state = BoardState.from_board_scene(board)
-	print("Debug: Board state updated")
 	
 func _clear_selected_square_highlight():
 	if selected_square:
@@ -132,7 +130,6 @@ func add_piece(square: Square, piece_type: String, color: String):
 	new_piece.name = piece_name
 	new_piece.position = square.position
 	new_piece.square = square
-	print("Adding piece ", new_piece.name, " at ", square.cell)
 	board.add_child(new_piece)
 	new_piece.piece_clicked.connect(_on_piece_clicked)
 	

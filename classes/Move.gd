@@ -24,4 +24,3 @@ func _init(
     self.castle = mv_castle
     self.is_en_passant = mv_is_en_passant
     self.promotion_type = mv_promotion_type
-    print("Debug: Created move from ", self.from, " to ", self.to, " piece: ", self.piece.name, " captured: ", self.captured_piece, " castle: ", self.castle)

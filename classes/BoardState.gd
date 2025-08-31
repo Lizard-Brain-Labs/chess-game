@@ -27,7 +27,7 @@ static func from_board_scene(board_node: Node2D) -> BoardState:
 	var state = BoardState.new()
 	
 	for piece in board_node.get_children():
-		if not piece is Piece:
+		if not piece is Piece or piece.is_queued_for_deletion():
 			continue
 
 		var piece_pos = piece.square.cell
