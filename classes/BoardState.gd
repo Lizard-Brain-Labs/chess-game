@@ -32,5 +32,7 @@ static func from_board_scene(board_node: Node2D) -> BoardState:
 
 		var piece_pos = piece.square.cell
 		state.grid[piece_pos.x][piece_pos.y] = piece
+		# If needed, clone piece data here instead of referencing the scene instance
+		# e.g., {"uid": piece.get_instance_id(), "type": piece.type, "color": piece.color, ...}
 	return state
 	

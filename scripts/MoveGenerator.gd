@@ -12,26 +12,28 @@ const NW = NORTH + WEST
 const SE = SOUTH + EAST
 const SW = SOUTH + WEST
 
+const types = Piece.types
+
 static func get_moves(piece: Piece, board_state: BoardState) -> Array[Move]:
 	match piece.type:
-		"pawn":
+		types.PAWN:
 			return _get_pawn_moves(piece, board_state)
-		"rook":
+		types.ROOK:
 			return _get_moves_in_directions(
 				board_state, piece, [NORTH, SOUTH, WEST, EAST]
 			)
-		"bishop":
+		types.BISHOP:
 			return _get_moves_in_directions(
 				board_state, piece, [NE, NW, SE, SW]
 			)
-		"queen":
+		types.QUEEN:
 			return _get_moves_in_directions(
 				board_state, piece,
 				[NORTH, SOUTH, WEST, EAST, NE, NW, SE, SW]
 			)
-		"knight":
+		types.KNIGHT:
 			return _get_knight_moves(piece, board_state)
-		"king":
+		types.KING:
 			return _get_king_moves(piece, board_state)
 		_:
 			print("Unknown piece type: %s" % piece.type)
@@ -39,7 +41,7 @@ static func get_moves(piece: Piece, board_state: BoardState) -> Array[Move]:
 
 static func _get_pawn_moves(piece: Piece, board_state: BoardState) -> Array:
 	var moves: Array[Move] = []
-	var dir = NORTH if piece.color == "white" else SOUTH
+	var dir = NORTH if piece.color == 0 else SOUTH
 	var pos = piece.square.cell
 	var next = pos + dir
 	if board_state.is_within_bounds(next) and board_state.get_piece_at(next) == null:
@@ -47,7 +49,7 @@ static func _get_pawn_moves(piece: Piece, board_state: BoardState) -> Array:
 		# Double move if pawn hasn't moved yet
 		var double_next = next + dir
 		if not piece.has_moved and board_state.get_piece_at(double_next) == null:
-			moves.append(Move.new(piece, double_next))
+			moves.append(Move.new(piece, double_next, null, null, true))
 	# Captures
 	for diag in [dir + EAST, dir + WEST]:
 		var target = pos + diag
@@ -55,7 +57,15 @@ static func _get_pawn_moves(piece: Piece, board_state: BoardState) -> Array:
 			var occupant = board_state.get_piece_at(target)
 			if occupant and occupant.color != piece.color:
 				moves.append(Move.new(piece, target, occupant))
-	# En passant ...
+	# En passant
+	for side in [EAST, WEST]:
+		var side_pos = pos + side
+		if board_state.is_within_bounds(side_pos):
+			var side_piece = board_state.get_piece_at(side_pos)
+			print("Checking en passant for ", piece.name, " against ", side_piece, " at ", side_pos, "\nEligible: ", side_piece.can_en_passant if side_piece else "N/A")
+			if side_piece and side_piece.type == types.PAWN and side_piece.color != piece.color and side_piece.can_en_passant:
+				var ep_target = side_pos + dir
+				moves.append(Move.new(piece, ep_target, side_piece))
 
 	# Promotion ...
 	
@@ -116,7 +126,7 @@ static func _get_castling_moves(piece, board_state: BoardState) -> Array:
 	# Castling
 	var kingside_rook_pos = Vector2i(row, 7)
 	var kingside_rook = board_state.get_piece_at(kingside_rook_pos)
-	if kingside_rook and kingside_rook.type == "rook" and kingside_rook.color == color and not kingside_rook.has_moved:
+	if kingside_rook and kingside_rook.type == types.ROOK and kingside_rook.color == color and not kingside_rook.has_moved:
 		var clear = true
 		for y in range(col + 1, 7):
 			if board_state.get_piece_at(Vector2i(row, y)) != null:
@@ -129,7 +139,7 @@ static func _get_castling_moves(piece, board_state: BoardState) -> Array:
 	# Queenside castling
 	var queenside_rook_pos = Vector2i(row, 0)
 	var queenside_rook = board_state.get_piece_at(queenside_rook_pos)
-	if queenside_rook and queenside_rook.type == "rook" and queenside_rook.color == color and not queenside_rook.has_moved:
+	if queenside_rook and queenside_rook.type == types.ROOK and queenside_rook.color == color and not queenside_rook.has_moved:
 		var clear = true
 		for y in range(col - 1, 0, -1):
 			if board_state.get_piece_at(Vector2i(row, y)) != null:

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://da41tfirvbps7"]
 
 [ext_resource type="Texture2D" uid="uid://c3vieb8x61iad" path="res://resources/Chess_ndt45.svg" id="1_4tpnu"]
-[ext_resource type="Script" uid="uid://b7pl2wao320wx" path="res://scripts/piece.gd" id="1_lya7y"]
+[ext_resource type="Script" uid="uid://b7pl2wao320wx" path="res://classes/Piece.gd" id="1_lya7y"]
 
 [node name="KnightBlack" type="Control"]
 layout_mode = 3
@@ -9,8 +9,8 @@ anchors_preset = 0
 offset_right = 64.0
 offset_bottom = 64.0
 script = ExtResource("1_lya7y")
-type = "knight"
-color = "black"
+type = 1
+color = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(32, 32)

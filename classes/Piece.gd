@@ -2,11 +2,14 @@ class_name Piece extends Control
 # Represents a chess piece on the board
 
 signal piece_clicked(piece: Piece)
+enum colors { WHITE, BLACK }
+enum types { PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING }
 
-@export var type: String
-@export var color: String
+@export var type: types
+@export var color: colors
 var square: Square
 var has_moved: bool = false
+var can_en_passant: bool = false
 
 # Convenience constants oriented the correct direction for Y up
 const UP = Vector2i.LEFT

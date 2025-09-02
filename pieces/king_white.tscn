@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dx6lyr1qpndfi"]
 
 [ext_resource type="Texture2D" uid="uid://cnboff7w0ign7" path="res://resources/Chess_klt45.svg" id="1_uu3d1"]
-[ext_resource type="Script" uid="uid://b7pl2wao320wx" path="res://scripts/piece.gd" id="1_wn7e7"]
+[ext_resource type="Script" uid="uid://b7pl2wao320wx" path="res://classes/Piece.gd" id="1_wn7e7"]
 
 [node name="KingWhite" type="Control"]
 layout_mode = 3
@@ -9,8 +9,7 @@ anchors_preset = 0
 offset_right = 64.0
 offset_bottom = 64.0
 script = ExtResource("1_wn7e7")
-type = "king"
-color = "white"
+type = 5
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(32, 32)

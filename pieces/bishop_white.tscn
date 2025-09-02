@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://c4duy5aivihrm"]
 
 [ext_resource type="Texture2D" uid="uid://tormev7scpo7" path="res://resources/Chess_blt45.svg" id="1_6siiq"]
-[ext_resource type="Script" uid="uid://b7pl2wao320wx" path="res://scripts/piece.gd" id="1_a3jxy"]
+[ext_resource type="Script" uid="uid://b7pl2wao320wx" path="res://classes/Piece.gd" id="1_a3jxy"]
 
 [node name="BishopWhite" type="Control"]
 layout_mode = 3
@@ -9,8 +9,7 @@ anchors_preset = 0
 offset_right = 64.0
 offset_bottom = 64.0
 script = ExtResource("1_a3jxy")
-type = "bishop"
-color = "white"
+type = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(32, 32)

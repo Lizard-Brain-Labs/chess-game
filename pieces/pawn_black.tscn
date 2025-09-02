@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://ijya48bsldap"]
 
 [ext_resource type="Texture2D" uid="uid://cdxlrmc81mwd2" path="res://resources/Chess_pdt45.svg" id="1_78emf"]
-[ext_resource type="Script" uid="uid://b7pl2wao320wx" path="res://scripts/piece.gd" id="1_adrxs"]
+[ext_resource type="Script" uid="uid://b7pl2wao320wx" path="res://classes/Piece.gd" id="1_adrxs"]
 
 [node name="PawnBlack" type="Control"]
 layout_mode = 3
@@ -10,7 +10,7 @@ offset_right = 64.0
 offset_bottom = 64.0
 script = ExtResource("1_adrxs")
 type = "pawn"
-color = "black"
+color = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(32, 32)

@@ -6,7 +6,7 @@ var to: Vector2i
 var piece: Piece
 var captured_piece: Piece
 var castle: Move # A secondary move for castling (rook move)
-var is_en_passant: bool
+var en_passant_eligible: bool
 var promotion_type: String
 
 func _init(
@@ -14,7 +14,7 @@ func _init(
     mv_to: Vector2i, 
     mv_captured_piece: Piece = null,
     mv_castle: Move = null,
-    mv_is_en_passant: bool = false,
+    mv_enables_en_passant: bool = false,
     mv_promotion_type: String = "",
 ):
     self.from = mv_piece.square.cell
@@ -22,5 +22,5 @@ func _init(
     self.piece = mv_piece
     self.captured_piece = mv_captured_piece
     self.castle = mv_castle
-    self.is_en_passant = mv_is_en_passant
+    self.en_passant_eligible = mv_enables_en_passant
     self.promotion_type = mv_promotion_type

@@ -2,6 +2,7 @@ extends Node2D
 
 const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 const piece_order = ["rook", "knight", "bishop", "queen", "king", "bishop", "knight", "rook"]
+const types = Piece.types
 const piece_scenes = {
 	"pawn_white": preload("res://pieces/pawn_white.tscn"),
 	"pawn_black": preload("res://pieces/pawn_black.tscn"),
@@ -17,6 +18,8 @@ const piece_scenes = {
 	"king_black": preload("res://pieces/king_black.tscn")
 } 
 const move_marker = preload("res://scenes/move_marker.tscn")
+const colors = Piece.colors
+
 @onready var board = $chessboard
 @onready var debug_label: Label = %"debug label"
 var selected_piece : Piece = null
@@ -25,7 +28,7 @@ var end_square: Square
 var move_choices = {}
 var markers:Array[Control] = []
 var board_state : BoardState
-var white_turn = true
+var player_turn: colors = colors.WHITE
 
 func _ready():
 	# load default position
@@ -47,6 +50,8 @@ func _physics_process(_delta):
 		_release_piece()
 	
 func _on_piece_clicked(piece: Piece) -> void:
+	if piece.color != player_turn:
+		return
 	selected_piece = piece
 	_remove_markers()
 
@@ -94,9 +99,13 @@ func _move_selected_piece(move: Move) -> void:
 	if move.captured_piece:
 		print("Capturing ", move.captured_piece.name)
 		move.captured_piece.queue_free()
+	elif move.en_passant_eligible:
+		piece.can_en_passant = true
+		print(piece.name, " can be captured en passant next turn")
 	elif move.castle:
 		print("Castling, moving rook:")
 		_move_selected_piece(move.castle)
+		return # avoid double cleanup and turn advance
 	_cleanup_post_move()
 	_next_turn()
 	
@@ -154,9 +163,15 @@ func _remove_markers() -> void:
 	move_choices.clear()
 	
 func _next_turn() -> void:
-	white_turn = not white_turn
-	if white_turn:
-		debug_label.text = "White to move"
-	else:
+	if player_turn == colors.WHITE:
+		player_turn = colors.BLACK
 		debug_label.text = "Black to move"
+	else:
+		player_turn = colors.WHITE
+		debug_label.text = "White to move"
+
+	# clear en passant eligible for opponent's pawns
+	for piece in board.get_children():
+		if piece is Piece and piece.type == types.PAWN and piece.color == player_turn:
+			piece.can_en_passant = false
 	

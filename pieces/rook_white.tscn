@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://qeftsmt2y5lx"]
 
 [ext_resource type="Texture2D" uid="uid://dic1ose7qes04" path="res://resources/Chess_rlt45.svg" id="1_5h2io"]
-[ext_resource type="Script" uid="uid://b7pl2wao320wx" path="res://scripts/piece.gd" id="1_l2ufa"]
+[ext_resource type="Script" uid="uid://b7pl2wao320wx" path="res://classes/Piece.gd" id="1_l2ufa"]
 
 [node name="RookWhite" type="Control"]
 layout_mode = 3
@@ -11,8 +11,7 @@ offset_top = -32.0
 offset_right = 32.0
 offset_bottom = 32.0
 script = ExtResource("1_l2ufa")
-type = "rook"
-color = "white"
+type = 3
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(32, 32)

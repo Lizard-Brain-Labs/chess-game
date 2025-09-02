@@ -16,15 +16,13 @@ func _ready():
 func _create_board():
 	for rank in range(8):
 		for file in range(8):
-			var square = Square.new()
+			var color: Color
 			if (rank + file) % 2 == 0:
-				square.color = board_color_light
+				color = board_color_light
 			else:
-				square.color = board_color_dark
-			square.cell = Vector2i(rank, file)
-			square.size = Vector2(square_size, square_size)
+				color = board_color_dark
+			var square = Square.new(Vector2i(rank, file), square_size, color)
 			square.position = Vector2i(file * square_size, rank * square_size)
-			square.name = "%s%d" % [char(file + 97), 8 - rank]
 			squares[square.cell] = square
 			add_child(square)
 	
