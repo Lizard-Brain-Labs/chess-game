@@ -62,7 +62,6 @@ static func _get_pawn_moves(piece: Piece, board_state: BoardState) -> Array:
 		var side_pos = pos + side
 		if board_state.is_within_bounds(side_pos):
 			var side_piece = board_state.get_piece_at(side_pos)
-			print("Checking en passant for ", piece.name, " against ", side_piece, " at ", side_pos, "\nEligible: ", side_piece.can_en_passant if side_piece else "N/A")
 			if side_piece and side_piece.type == types.PAWN and side_piece.color != piece.color and side_piece.can_en_passant:
 				var ep_target = side_pos + dir
 				moves.append(Move.new(piece, ep_target, side_piece))

@@ -25,10 +25,10 @@ const colors = Piece.colors
 var selected_piece : Piece = null
 var selected_square : Square
 var end_square: Square
-var move_choices = {}
 var markers:Array[Control] = []
 var board_state : BoardState
 var player_turn: colors = colors.WHITE
+var hovered_square: Square = null
 
 func _ready():
 	# load default position
@@ -45,15 +45,32 @@ func _physics_process(_delta):
 	if Input.is_action_just_pressed("left_click"):
 		_handle_mouse_click()
 	if Input.is_action_pressed("left_click"):
-		_drag_selected_piece()
+		pass
 	elif Input.is_action_just_released("left_click"):
-		_release_piece()
+		pass
 	
 func _on_piece_clicked(piece: Piece) -> void:
 	if piece.color != player_turn:
 		return
-	selected_piece = piece
+	if piece == selected_piece:
+		selected_piece = null
+	else:
+		selected_piece = piece
 	_remove_markers()
+
+func _on_square_mouse_entered(square: Square) -> void:
+	if hovered_square:
+		hovered_square.self_modulate = Color.WHITE
+	hovered_square = square
+	hovered_square.self_modulate = Color.HOT_PINK
+
+func _on_marker_mouse_entered(marker: Control) -> void:
+	_clear_end_square()
+	end_square = board.squares[marker.move.to]
+	end_square.self_modulate = Color.DARK_ORANGE
+
+func on_marker_mouse_exited() -> void:
+	_clear_end_square()
 
 func _handle_mouse_click() -> void:
 	_clear_selected_square_highlight()
@@ -62,33 +79,9 @@ func _handle_mouse_click() -> void:
 		selected_square.self_modulate = Color.SLATE_GRAY
 		var moves = MoveGenerator.get_moves(selected_piece, board_state)
 		for move: Move in moves:
-			add_marker(board.squares[move.to])
-			move_choices[move.to] = move
+			add_marker(move)
 
-func _drag_selected_piece():
-	if selected_piece:
-		selected_piece.position = board.get_local_mouse_position() - Vector2(32,32)
-		
-func _release_piece():
-	if not selected_piece:
-		return
-
-	end_square = board.square_from_pos(board.get_local_mouse_position())
-	var valid = _is_valid_move_to(end_square)
-	if valid:
-		var move = move_choices[end_square.cell]
-		_move_selected_piece(move)
-	else:
-		_reset_piece_to_selected_square()
-		
-	
-func _is_valid_move_to(square: Square) -> bool:
-	for move_choice in move_choices.values():
-		if move_choice.to == square.cell:
-			return true
-	return false
-
-func _move_selected_piece(move: Move) -> void:
+func _move_piece(move: Move) -> void:
 	var to_square = board.squares[move.to]
 	var piece = move.piece
 	print("Moving ", piece.name, " to ", to_square.name)
@@ -104,7 +97,7 @@ func _move_selected_piece(move: Move) -> void:
 		print(piece.name, " can be captured en passant next turn")
 	elif move.castle:
 		print("Castling, moving rook:")
-		_move_selected_piece(move.castle)
+		_move_piece(move.castle)
 		return # avoid double cleanup and turn advance
 	_cleanup_post_move()
 	_next_turn()
@@ -121,9 +114,10 @@ func _clear_selected_square_highlight():
 	if selected_square:
 		selected_square.self_modulate = Color.WHITE
 
-func _clear_end_square_highlight():
+func _clear_end_square():
 	if end_square:
 		end_square.self_modulate = Color.WHITE
+		end_square = null
 
 func add_piece(square: Square, piece_type: String, color: String):
 	var piece_name = piece_type + "_" + color
@@ -149,18 +143,21 @@ func name_exists(piece_name):
 			piece_name_exists = true
 	return piece_name_exists
 	
-func add_marker(square:Square):
+func add_marker(move:Move) -> void:
 	var marker = move_marker.instantiate()
+	marker.move = move
+	var square = board.squares[move.to]
 	marker.position = square.position
-	marker.square_name = square.name
 	board.add_child(marker)
+	marker.piece_dropped.connect(_move_piece)
+	marker.mouse_entered.connect(_on_marker_mouse_entered.bind(marker))
+	marker.mouse_exited.connect(on_marker_mouse_exited)
 	markers.append(marker)
 	
 func _remove_markers() -> void:
 	for marker in markers:
 		marker.queue_free()
 	markers = []
-	move_choices.clear()
 	
 func _next_turn() -> void:
 	if player_turn == colors.WHITE:

@@ -13,6 +13,6 @@ type = 3
 color = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(32, 32)
 scale = Vector2(0.178, 0.178)
 texture = ExtResource("1_c7s38")
+centered = false

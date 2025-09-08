@@ -9,9 +9,9 @@ anchors_preset = 0
 offset_right = 64.0
 offset_bottom = 64.0
 script = ExtResource("1_iepny")
-type = 2
+type = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(32, 32)
 scale = Vector2(0.178, 0.178)
 texture = ExtResource("1_sysm8")
+centered = false

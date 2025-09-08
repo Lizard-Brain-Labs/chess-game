@@ -1,20 +1,17 @@
 [gd_scene load_steps=3 format=3 uid="uid://2olvo5bmf4d5"]
 
-[ext_resource type="Script" uid="uid://cc4qjyoahlnn1" path="res://move_marker.gd" id="1_htbjf"]
+[ext_resource type="Script" uid="uid://cc4qjyoahlnn1" path="res://scripts/move_marker.gd" id="1_htbjf"]
 [ext_resource type="Texture2D" uid="uid://5m5jlolhaxwj" path="res://resources/circle.png" id="1_inkqd"]
 
 [node name="moveMarker" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 0
 offset_left = -32.0
 offset_top = -32.0
-offset_right = -568.0
-offset_bottom = -568.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 32.0
+offset_bottom = 32.0
 script = ExtResource("1_htbjf")
+metadata/_custom_type_script = "uid://b7pl2wao320wx"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 self_modulate = Color(0.694118, 0.694118, 0.694118, 0.752941)

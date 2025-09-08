@@ -6,13 +6,15 @@
 [node name="KingBlack" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 64.0
-offset_bottom = 64.0
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
 script = ExtResource("1_h0ru5")
 type = 5
 color = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(32, 32)
 scale = Vector2(0.178, 0.178)
 texture = ExtResource("1_wjufy")
+centered = false
