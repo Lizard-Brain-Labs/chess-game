@@ -1,11 +1,14 @@
 class_name BoardState
 # Represents the state of a chess board in data
 
+const colors = Piece.colors
 const BOARD_SIZE = 8
 
 var grid := []
+var player_turn: colors
 
-func _init():
+func _init(turn: colors) -> void:
+	player_turn = turn
 	grid.resize(BOARD_SIZE)
 	for x in range(BOARD_SIZE):
 		grid[x] = []
@@ -23,8 +26,8 @@ func is_within_bounds(pos: Vector2i) -> bool:
 	return pos.x >= 0 and pos.x < BOARD_SIZE and pos.y >= 0 and pos.y < BOARD_SIZE
 
 # Build a board state from a scene-based board (after a move)
-static func from_board_scene(board_node: Node2D) -> BoardState:
-	var state = BoardState.new()
+static func from_board_scene(board_node: Node2D, turn: colors) -> BoardState:
+	var state = BoardState.new(turn)
 	
 	for piece in board_node.get_children():
 		if not piece is Piece or piece.is_queued_for_deletion():

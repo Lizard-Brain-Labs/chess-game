@@ -1,10 +1,11 @@
 extends Node2D
 
 @export var square_size = 64
-@export var board_color_light = Color("#EEEED2")  # light
-@export var board_color_dark = Color("#769656")  # dark
+@export var board_color_light = Color("#d4d4a2ff")  # light
+@export var board_color_dark = Color("#613838ff")  # dark
 
 var squares = {}
+var board_state : BoardState
 
 func _ready():
 	var board_size = Vector2i(square_size * 8, square_size * 8)

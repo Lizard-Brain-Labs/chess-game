@@ -25,7 +25,8 @@ func _gui_input(event):
 			emit_signal("piece_clicked", self)
 
 func _get_drag_data(_position: Vector2) -> Piece:
-	print("Dragging piece: ", name)
+	if color != get_parent().board_state.player_turn:
+		return null
 	var preview = self.duplicate(DUPLICATE_USE_INSTANTIATION)
 	preview.get_child(0).centered = true
 	set_drag_preview(preview)
